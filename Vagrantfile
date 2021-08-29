@@ -1,10 +1,10 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# All Vagrant configuration is done below. The "2" in Vagrant.configure
-# configures the configuration version (we support older styles for
-# backwards compatibility). Please don't change it unless you know what
-# you're doing.
+# $script = <<-SCRIPT
+# apt-get install nodejs npm
+# SCRIPT
+
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/bionic64"
 
@@ -15,7 +15,11 @@ Vagrant.configure("2") do |config|
     app.vm.network "forwarded_port", guest: 8080, host: 8081,
     auto_correct: true, id: "wanderer-app"
     app.vm.network "private_network", type: "dhcp"
+#   app.vm.provision "shell", inline: "apt-get install -y nodejs npm"
+#   app.vm.provision "shell", inline: $script
+    app.vm.provision "shell", path: "scripts/pre.sh"
   end
+
   config.vm.define "prom" do |prom|
     prom.vm.hostname = "prom"
     prom.vm.network "forwarded_port", guest:9090, host:9090,
