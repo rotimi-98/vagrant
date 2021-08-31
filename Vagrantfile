@@ -18,6 +18,8 @@ Vagrant.configure("2") do |config|
 #   app.vm.provision "shell", inline: "apt-get install -y nodejs npm"
 #   app.vm.provision "shell", inline: $script
     app.vm.provision "shell", path: "scripts/pre.sh"
+    app.vm.provision "file", source: "configs/services", destination: "/tmp/services"
+    app.vm.provision "shell", path: "scripts/post.sh"
   end
 
   config.vm.define "prom" do |prom|
